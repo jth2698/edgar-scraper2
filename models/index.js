@@ -1,0 +1,1 @@
+module.exports = { Contract: require('./contract') };
