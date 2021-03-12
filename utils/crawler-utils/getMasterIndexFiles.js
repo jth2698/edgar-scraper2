@@ -31,8 +31,6 @@ const getMasterIndexFiles = async (year) => {
         })
     })
 
-    console.log(sourceURLs);
-
     // Due to local extraction issues, we are using unzipper's `Open.url` method to extract the file directly from the sec's website. See https://www.npmjs.com/package/unzipper under "Open.url."
     try {
         for (const sourceURL of sourceURLs) {

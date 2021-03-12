@@ -81,11 +81,10 @@ const scrapeContractURLData = async (year) => {
         contractData = [].concat(...contractData);
 
         // Write the conractData to a local JSON file so that we don't have to scrape EDGAR for every run
-        await fs.writeFile(`./data/${year}/${year}_Master.json`, JSON.stringify(contractData), 'utf8', error => {
+        await fs.writeFileSync(`./data/${year}/${year}_Master.json`, JSON.stringify(contractData), 'utf8', error => {
             if (error) { console.log(error) }
             else { 'contractData saved ' }
         })
-
 
     } catch (error) { throw error };
 }
