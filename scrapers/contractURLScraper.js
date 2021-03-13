@@ -1,9 +1,12 @@
 const cheerio = require('cheerio');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const getEdgarIndexSources = require('../utils/crawler-utils/getEdgarIndexSources');
 const fetchSECPage = require('../utils/fetch-utils/fetchSECPage');
 const getURLQueue = require('../utils/fetch-utils/getURLQueue');
+
+
+const db = require('../models');
 
 let indexData;
 
@@ -80,11 +83,15 @@ const scrapeContractURLData = async (year) => {
         // .flat() (or [].concat(...data)) removes nested array so all data is returned in one array
         contractData = [].concat(...contractData);
 
-        // Write the conractData to a local JSON file so that we don't have to scrape EDGAR for every run
-        await fs.writeFileSync(`./data/${year}/${year}_Master.json`, JSON.stringify(contractData), 'utf8', error => {
+        //Write the conractData to a local JSON file so that we don't have to scrape EDGAR for every run
+
+        await fs.outputJson(`./data/${year}/${year}_Master.json`, contractData, error => {
             if (error) { console.log(error) }
             else { 'contractData saved ' }
         })
+
+
+
 
     } catch (error) { throw error };
 }
