@@ -4,27 +4,28 @@ const cheerio = require('cheerio');
 // Don't delete, see commented console.log at end of file
 const util = require('util');
 
+const scrapeContractURLs = require('./contractURLScraper');
 const fetchSECPage = require('../utils/fetch-utils/fetchSECPage');
 const bluebird = require('../utils/fetch-utils/bluebird');
 
 const db = require('../models');
 
-const dataDir = path.resolve('./data');
-
 let contractData;
 
-// Helper function to read contractData in from the local year_Master JSON file
-const getContractData = async (year) => {
-    try {
-        let rawContractData = fs.readFileSync(`${dataDir}/${year}/${year}_Master.json`);
-        let contractData = await JSON.parse(rawContractData);
-        return contractData;
-    }
-    catch (error) { throw error }
-}
+// Helper function to read contractData in from the local year_Master JSON file - Was having issues with large file save so reverted to returning data from contractURLScraper
+// const getContractData = async (year) => {
+//     try {
+//         let rawContractData = fs.readFileSync(`${dataDir}/${year}/${year}_Master.json`);
+//         let contractData = await JSON.parse(rawContractData);
+//         return contractData;
+//     }
+//     catch (error) { throw error }
+// }
 
-// Helper function return the urls from that file
+// Helper function return the urls from contractURLScraper
 const getContractURLs = async (year) => {
+
+    contractData = await scrapeContractURLs(year);
 
     try {
         let contractURLs = [];
@@ -391,7 +392,7 @@ const scrapePClauses = async (year) => {
     try {
 
         // First call getContractData to read contractData out of JSON file
-        contractData = await getContractData(year);
+        // contractData = await getContractData(year);
 
         // Then generate the array of urls to pass to bluebird 
         let urls = await getContractURLs(year);
